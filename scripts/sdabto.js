@@ -1,8 +1,9 @@
 var sdabto = sdabto || {};
 
-sdabto.init_info = {
+sdabto.initInfo = {
   name: 'sdabto',
-  prompt: 'What would you like to do? '
+  prompt: 'What would you like to do? ',
+  greetings: MESSAGES.introMessage
 };
 
 sdabto.commands = {
@@ -44,7 +45,7 @@ sdabto.commands = {
 sdabto.init = function() {
   $('#terminal').terminal(
     sdabto.commands,
-    sdabto.init_info
+    sdabto.initInfo
   );
 };
 

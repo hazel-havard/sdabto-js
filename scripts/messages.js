@@ -44,5 +44,13 @@ var MESSAGES = {
       command: 'work [hours]',
       message: 'Work from home for a number of hours (eg "work 4")'
     }
-  ]
+  ],
+  introMessage:
+    "Welcome to Some Days Are Better Than Others\n" +
+    "Content Warning: Suicide\n\n" +
+    "You live alone and do freelance work from your computer.\n" +
+    "You enjoy gaming, watching movies, and hanging out with friends.\n" +
+    "You'd like to save up some money and go to university one day.\n" +
+    "Take life one day at a time.\n\n" +
+    "Type 'help' for some ideas of what to do\n"
 };
