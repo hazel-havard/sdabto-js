@@ -1,22 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="external/jquery-terminal/jquery.terminal-0.9.3.css" media="screen" />
-		<script src="external/jquery/jquery-1.12.0.min.js"></script>
-		<script src="external/jquery-mousewheel/jquery.mousewheel.min.js"></script>
-		<script src="external/jquery-terminal/jquery.terminal-0.9.3.min.js"></script>
-		<script src="external/jquery-terminal/unix_formatting.js"></script>
+		<link rel="stylesheet" type="text/css" href="scripts/external/jquery-terminal/jquery.terminal-0.9.3.css" media="screen" />
+		<script src="scripts/external/jquery/jquery-1.12.0.min.js"></script>
+		<script src="scripts/external/jquery-mousewheel/jquery.mousewheel.min.js"></script>
+		<script src="scripts/external/jquery-terminal/jquery.terminal-0.9.3.min.js"></script>
+		<script src="scripts/external/jquery-terminal/unix_formatting.js"></script>
+		<script src="scripts/sdabto.js"></script>
 	</head>
 	<body>
 	<div id="terminal"></div>
-	<script>
-$('#terminal').terminal(function(command, term) {
-if (command == 'test') {
-term.echo("you just typed 'test'");
-} else {
-term.echo('unknown command');
-}
-}, { prompt: '>', name: 'test' });
-	</script>
 	</body>
 </html>
