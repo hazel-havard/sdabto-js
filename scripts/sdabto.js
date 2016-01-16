@@ -7,6 +7,26 @@ sdabto.init_info = {
 
 sdabto.commands = {
   help: function() {
+    this.echo('Available commands:');
+    this.echo('===================');
+    var maxCommandLength = 0;
+    for(var i = 0; i < MESSAGES.helpMessages.length; i++) {
+      var commandLength = MESSAGES.helpMessages[i]['command'].length;
+      if (commandLength > maxCommandLength) {
+        maxCommandLength = commandLength;
+      }
+    }
+    for(var i = 0; i < MESSAGES.helpMessages.length; i++) {
+      var message = MESSAGES.helpMessages[i]
+      var commandLength = message['command'].length;
+      var lengthDifference = maxCommandLength - commandLength;
+      var helpString = message['command'].concat(
+        ' '.repeat(lengthDifference),
+        ' - ',
+        message['message']
+      );
+      this.echo(helpString);
+    }
   },
   call: function() {},
   clean: function() {},
