@@ -63,12 +63,62 @@ sdabto.getGreetings = function() {
   return greetings;
 };
 
+sdabto.printMessages = function(terminal, messages) {
+  for(var i = 0; i < messages.length; i++) {
+    terminal.echo('\t' + messages[i]);
+  }
+}
+
 sdabto.postCommand = function(terminal) {
   if(sdabto.character.dead) {
     terminal.echo(' ');
     terminal.echo('You have died. Game over.');
     sdabto.endTerminal(terminal);
   }
+
+  if(sdabto.character.diseaseStage.lossOfControlChance
+     && Math.random() < sdabto.character.diseaseStage.lossOfControlChance) {
+    terminal.echo(' ');
+    terminal.echo('You lose control for about 8 hours.');
+    terminal.echo(' ');
+    sdabto.printMessages(terminal, sdabto.character.addHours(8));
+    switch(randomElement(sdabto.character.diseaseStage.activities)) {
+      case 'SHOPPING':
+        terminal.echo(
+          'You go shopping and spend all of your money on extravagant home ' +
+          'furnishings.');
+        sdabto.character.money -= 500;
+        break;
+      case 'DRIVING':
+        terminal.echo(
+          'You rent a car and go for a drive. You find yourself driving ' +
+          'much too fast.');
+        if(Math.random() < SPEEDING_RISK) {
+          terminal.echo(
+            'You get into a terrible car accident. You and the driver are ' +
+            'both killed.');
+          terminal.echo(' ');
+          terminal.echo('You have died. Game over.');
+          sdabto.endTerminal(terminal);
+        }
+        break;
+      case 'ART':
+        terminal.echo(
+          'You start creating an elaborate calligraphy project.');
+        break;
+      case 'MUSIC':
+        terminal.echo(
+          'You find yourself thinking in rhymes and start writing songs.');
+        break;
+    }
+  }
+
+  terminal.echo(' ');
+  statusMessages = sdabto.getStatus();
+  sdabto.printMessages(terminal,statusMessages.messages);
+  terminal.echo(' ');
+  terminal.echo(statusMessages.statusLine);
+  terminal.echo(' ');
 };
 
 sdabto.endTerminal = function(terminal) {
@@ -186,24 +236,34 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   clean: function() {
+    sdabto.postCommand(this);
   },
   eat: function() {
+    sdabto.postCommand(this);
   },
   exercise: function() {
+    sdabto.postCommand(this);
   },
   game: function(hours) {
+    sdabto.postCommand(this);
   },
   read: function(hours) {
+    sdabto.postCommand(this);
   },
   shop: function() {
+    sdabto.postCommand(this);
   },
   sleep: function(hours) {
+    sdabto.postCommand(this);
   },
   socialize: function(hours) {
+    sdabto.postCommand(this);
   },
   watch: function(type, hours) {
+    sdabto.postCommand(this);
   },
   work: function(hours) {
+    sdabto.postCommand(this);
   },
   quit: function() {
     sdabto.endTerminal(this);
