@@ -150,6 +150,10 @@ sdabto.initInfo = {
           return false;
         }
       }
+    } else if(command.length != 1) {
+      terminal.echo('Type this command on its own (eg. "eat")');
+      terminal.echo(' ');
+      return false;
     }
     return true;
   }
