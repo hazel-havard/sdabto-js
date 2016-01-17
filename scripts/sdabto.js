@@ -236,6 +236,21 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   clean: function() {
+    if(sdabto.character.diseaseStage.hospitalActivities) {
+      this.echo(' ');
+      this.echo('\tYou are not at home right now.');
+    } else if(Math.random() < sdabto.character.diseaseStage.workFailure) {
+      this.echo(' ');
+      this.echo('\tYou cannot be bothered to clean anything right now.');
+    } else if(sdabto.character.displayEnergy() < 20) {
+      this.echo(' ');
+      this.echo('\tYou are too tired to face cleaning right now.');
+    } else {
+      var messages = sdabto.character.clean();
+      messages.push('You clean your house.');
+      this.echo(' ');
+      sdabto.printMessages(this, messages);
+    }
     sdabto.postCommand(this);
   },
   eat: function() {
