@@ -373,6 +373,22 @@ function Character() {
         }
       }
       return messages;
+    },
+
+    read: function(hours){
+      var messages = this.addHours(hours);
+      hours = Math.max(0, Math.min(hours, 4 - this.hoursRead));
+      this.hoursRead += hours;
+      this.mood += 5 * hours;
+      return messages;
+    },
+
+    watch: function(hours){
+      var messages = this.addHours(hours);
+      hours = Math.max(0, Math.min(hours, 4 - this.hoursWatched));
+      this.hoursWatched += hours;
+      this.mood += 5 * hours;
+      return messages;
     }
   };
 
