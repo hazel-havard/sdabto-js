@@ -300,13 +300,24 @@ sdabto.commands = {
         'Maybe tomorrow.');
     } else {
       var messages = sdabto.character.exercise();
-      messages.push('You go for a run');
+      messages.push('You go for a run.');
       sdabto.printMessages(this, messages);
     }
     sdabto.postCommand(this);
   },
   game: function(hours) {
     this.echo(' ');
+    if(hours > 8) {
+      this.echo('\tAfter 8 hours you lose interest.');
+      hours = 8;
+    } else if(math.Random() < sdabto.character.diseaseStage.focusChance) {
+      this.echo('\tYou lose track of time and game for 8 hours.');
+      hours = 8;
+    }
+
+    var messages = sdabto.character.game(hours);
+    messages.append('You play on your computer.');
+    sdabto.printMessages(this, messages);
     sdabto.postCommand(this);
   },
   read: function(hours) {
@@ -327,10 +338,10 @@ sdabto.commands = {
         '\tYou are too tired to haul home food. ' +
         'There must be something in the fridge...');
     } else if(sdabto.character.groceries > 21) {
-      this.echo('\tYour fridge is too full for more groceries');
+      this.echo('\tYour fridge is too full for more groceries.');
     } else {
       var messages = sdabto.character.shopping();
-      messages.push('You buy another week of groceries');
+      messages.push('You buy another week of groceries.');
       sdabto.printMessages(this, messages);
     }
     sdabto.postCommand(this);
