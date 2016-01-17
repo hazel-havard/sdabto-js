@@ -273,6 +273,22 @@ sdabto.commands = {
   },
   exercise: function() {
     this.echo(' ');
+    if(sdabto.character.hospitalActivities) {
+      this.echo('\tYou are not allowed outside yet.');
+    } else if(sdabto.character.mealTimes
+              && $.inArray(
+                sdabto.character.hoursPlayed % 24,
+                sdabto.character.diseaseStage.mealTimes) >= 0) {
+      this.echo('\tA nurse stops you to tell you it is meal time.');
+    } else if(sdabto.character.displayEnergy() < 20) {
+      this.echo(
+        '\tContemplayting a run makes you feel exhausted. ' +
+        'Maybe tomorrow.');
+    } else {
+      var messages = sdabto.character.exercise();
+      messages.push('You go for a run');
+      sdabto.printMessages(this, messages);
+    }
     sdabto.postCommand(this);
   },
   game: function(hours) {
