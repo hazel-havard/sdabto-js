@@ -248,12 +248,29 @@ sdabto.commands = {
     } else {
       var messages = sdabto.character.clean();
       messages.push('You clean your house.');
-      this.echo(' ');
       sdabto.printMessages(this, messages);
     }
     sdabto.postCommand(this);
   },
   eat: function() {
+    if(sdabto.character.diseaseStage.mealTimes
+       && $.inArray(
+         sdabto.character.hoursPlayed % 24,
+         sdabto.character.diseaseStage.mealTimes) < 0) {
+      this.echo(' ');
+      this.echo('\tIt is not meal time yet.');
+    } else if(sdabto.character.lastMeal < 4
+              || Math.random() < sdabto.character.diseaseStage.eatFailure) {
+      this.echo(' ');
+      this.echo('\tYou do not feel like eating right now.');
+    } else if(sdabto.character.groceries <= 0) {
+      this.echo(' ');
+      this.echo('\tYou are out of food. Try "shop" to get more.');
+    } else {
+      var messages = sdabto.character.eat();
+      messages.push('You eat a meal.');
+      sdabto.printMessages(this, messages);
+    }
     sdabto.postCommand(this);
   },
   exercise: function() {
