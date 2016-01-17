@@ -302,6 +302,77 @@ function Character() {
       this.mood += moodBonus;
       this.lastSocial = 0;
       return messages;
+    },
+
+    call: function(recipient) {
+      var messages = this.addHours(1);
+      if($.inArray(recipient, CALL_DICT.parents) >= 0) {
+        if(!this.calledParents) {
+          this.calledParents = true;
+          this.mood += 5;
+        }
+
+        if(this.displayMood() < 20) {
+          messages.push('Your parents notice how rough you are feeling and are worried.');
+        } else if(this.displayMood() < 50) {
+          messages.push('Your parents notice you are feeling down and try to cheer you up.');
+        } else if(this.displayMood() > 150) {
+          messages.push('Your parents can barely understand you. They are seriously worried about you.');
+        } else {
+          messages.push('You have a lovely chat with your parents.');
+        }
+
+        if(this.money < 0) {
+          messages.push('Your parents bail you out of your debt. You feel guilty');
+          this.money = 0;
+        }
+      } else if($.inArray(recpieint, CALL_DICT.friend) >= 0) {
+        if(!this.calledFriend) {
+          this.calledFriend = true;
+          this.mood += 5;
+        }
+
+        if(this.displayMood() < 20) {
+          messages.push('Your friend notices how rough you are feeling and is worried.');
+        } else if(this.displayMood() < 50) {
+          messages.push('Your friend notices you are not very happy and tries to cheer you up');
+        } else if(this.displayMood() > 150) {
+          messages.push('You seriously freak out your friend, who can barely get a word in edgewise');
+        } else {
+          messages.push('You have a lovely chat with your friend.');
+        }
+      } else if($.inArray(recpieint, CALL_DICT.hospital) >= 0) {
+        if(this.diseaseStage.hospitalMessage) {
+          messages.push(this.diseaseStage.hospitalMessage);
+        } else {
+          messages.push('You are turned away. Try "call doctor"');
+        }
+      } else if($.inArray(recpieint, CALL_DICT.doctor) >= 0) {
+        if(this.diseaseStage.doctorMessage) {
+          messages.push(this.diseaseStage.doctorMessage);
+        } else {
+          messages.push('You seem to be in fine health');
+        }
+
+        if(this.diseaseStage.doctorStage) {
+          Array.prototype.push.apply(
+            messages, this.changeStage(this.diseaseStage.doctorStage));
+        }
+      } else if($.inArray(recpieint, CALL_DICT.helpline) >= 0) {
+        messages.push('The helpline details resources available to you. Try "call pychologist", "call doctor", or "call hospital"');
+      } else if($.inArray(recpieint, CALL_DICT.psychologist) >= 0) {
+        if(this.diseaseStage.psychologistMessage) {
+          messages.push(this.diseaseStage.psychologistMessage);
+        } else {
+          messages.push('The psychologist patiently listens to your problems');
+        }
+
+        if(this.diseaseStage.psychologistStage) {
+          Array.prototype.push.apply(
+            messages, this.changeStage(this.diseaseStage.psychologistStage));
+        }
+      }
+      return messages;
     }
   };
 
