@@ -1,3 +1,25 @@
+// Some globals
+var RENT = 250;
+var GROCERIES = 50;
+// Allowable time between events.
+var MEAL_INTERVAL = 6; //hours
+var SLEEP_INTERVAL = 16; //hours
+var EXERCISE_INTERVAL = 2; //days
+var SOCIAL_INTERVAL = 2; //days
+var CLEANING_INTERVAL = 2; //days
+// Risks of death while out of control
+var SPEEDING_RISK = 0.2;
+var ALCOHOL_POISONING_CHANCE = 0.2;
+// List of people you can call
+var CALL_DICT = {
+  parents: ["mom", "mother", "dad", "father", "parents", "home", "family"],
+  friend: ["friend", "friends"],
+  hospital: ["hospital", "police", "ambulance", "911"],
+  doctor: ["doctor", "psychiatrist"],
+  helpline: ["helpline", "suicide helpline", "hotline", "suicide hotline"],
+  psychologist: ["therapist", "councellor", "psychologist"]
+};
+
 function Character() {
   character = {
     diseaseStage: NORMAL,
@@ -71,8 +93,62 @@ function Character() {
       // Recheck using new disease stage caps
       this.mood += 0;
       this.energy += 0;
-      this.disesaseDays = 0;
+      this.diseaseDays = 0;
       messages.push(this.diseaseStage.introMessage);
+      return messages;
+    },
+
+    addHours: function(hours) {
+      messages = [];
+
+      // If we crossed a day boundary
+      if(Math.floor(this.hoursPlayed / 24)
+         < Math.floor((this.hoursPlayed + hours) / 24)) {
+        this.hoursGamed = 0;
+        this.hoursSocialized = 0;
+        this.hoursRead = 0;
+        this.hoursWatched = 0;
+        this.calledParents = false;
+        this.calledFriend = false;
+        this.lastExercise += 1;
+        this.lastSocial += 1;
+        this.lastCleaned += 1;
+        this.diseaseDays += 1;
+
+        if(this.diseaseDays >= this.diseaseStage.length) {
+          if(this.diseaseStage.nextStage === undefined) {
+            this.dead = true;
+            messages.push('You have committed suicide');
+            return messages;
+          }
+          Array.prototype.push.apply(
+            messages, this.changeStage(this.diseaseStage.nextStage));
+        }
+
+        if((Math.floor(this.hoursPlayed + hours) / 24) % 7 == 0) {
+          this.money -= RENT;
+          messages.push('Rent and bills due. $' + RENT + ' deducted.');
+        }
+      }
+
+      this.lastMeal += hours;
+      this.lastSleep += hours;
+      this.hoursPlayed += hours;
+
+      if(this.diseaseStage.effect !== undefined
+         && Math.random() < SIDE_EFFECT_FREQ * hours) {
+        messages.push(this.diseaseStage.effect.message);
+      }
+
+      if(Math.random() < this.diseaseStage.thoughtFreq * hours) {
+        messages.push(randomElement(this.diseaseStage.thoughts));
+      }
+
+      if(this.lastMeal > 24 * 7) {
+        messages.push('You have starved to death');
+        this.dead = true;
+      }
+
       return messages;
     }
   };

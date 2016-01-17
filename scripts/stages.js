@@ -30,6 +30,7 @@ var NAUSEA = {
 };
 var SIDE_EFFECTS = [LOW_ENERGY, LOW_CONCENTRATION, POOR_APPETITE, SHAKY_HANDS, POOR_MEMORY, NAUSEA];
 var SIDE_EFFECT = randomElement(SIDE_EFFECTS);
+var SIDE_EFFECT_FREQ = 2/24;
 var MEDICATED_DEPRESSION = {};
 var MEDICATED = {
   introMessage: "You can feel things again\n" +
