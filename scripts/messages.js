@@ -43,6 +43,10 @@ var MESSAGES = {
     {
       command: 'work [hours]',
       message: 'Work from home for a number of hours (eg "work 4")'
+    },
+    {
+      command: 'quit',
+      message: 'Stop the game'
     }
   ],
   introMessage:

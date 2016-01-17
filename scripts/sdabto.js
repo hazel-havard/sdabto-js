@@ -63,6 +63,32 @@ sdabto.getGreetings = function() {
   return greetings;
 };
 
+sdabto.postCommand = function(terminal) {
+  if(sdabto.character.dead) {
+    terminal.echo(' ');
+    terminal.echo('You have died. Game over.');
+    sdabto.endTerminal(terminal);
+  }
+};
+
+sdabto.endTerminal = function(terminal) {
+  terminal.echo(' ');
+  terminal.echo("This game was based on my own experiences.");
+  terminal.echo("All the thoughts are thoughts I've had,");
+  terminal.echo(
+    "and all the situations are based on things I've experienced.");
+  terminal.echo(
+    "This may be different from your experiences with mental illness.");
+  terminal.echo("I don't mean to imply that this is everyone's reality,");
+  terminal.echo("but I wanted to give you a glimpse of mine.");
+  terminal.echo("Thanks for playing along.");
+  terminal.echo(' ');
+  terminal.echo("Goodbye");
+  terminal.echo(' ');
+  terminal.echo('(Refresh page to play again)');
+  terminal.pause();
+}
+
 sdabto.initInfo = {
   name: 'sdabto',
   prompt: 'What would you like to do? ',
@@ -153,6 +179,7 @@ sdabto.commands = {
     }
   },
   call: function(recipient) {
+    sdabto.postCommand(this);
   },
   clean: function() {
   },
@@ -173,6 +200,9 @@ sdabto.commands = {
   watch: function(type, hours) {
   },
   work: function(hours) {
+  },
+  quit: function() {
+    sdabto.endTerminal(this);
   }
 };
 
