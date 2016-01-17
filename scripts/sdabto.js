@@ -249,6 +249,15 @@ sdabto.commands = {
   },
   call: function(recipient) {
     this.echo(' ');
+    if(sdabto.character.mealTimes
+       && $.inArray(
+         sdabto.character.hoursPlayed % 24,
+         sdabto.character.diseaseStage.mealTimes) >= 0) {
+      this.echo('\tA nurse stops you to tell you it is meal time.');
+    } else {
+      var messages = sdabto.character.call(recipient);
+      sdabto.printMessages(this, messages);
+    }
     sdabto.postCommand(this);
   },
   clean: function() {

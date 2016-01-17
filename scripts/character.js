@@ -326,7 +326,7 @@ function Character() {
           messages.push('Your parents bail you out of your debt. You feel guilty');
           this.money = 0;
         }
-      } else if($.inArray(recpieint, CALL_DICT.friend) >= 0) {
+      } else if($.inArray(recipient, CALL_DICT.friend) >= 0) {
         if(!this.calledFriend) {
           this.calledFriend = true;
           this.mood += 5;
@@ -341,13 +341,13 @@ function Character() {
         } else {
           messages.push('You have a lovely chat with your friend.');
         }
-      } else if($.inArray(recpieint, CALL_DICT.hospital) >= 0) {
+      } else if($.inArray(recipient, CALL_DICT.hospital) >= 0) {
         if(this.diseaseStage.hospitalMessage) {
           messages.push(this.diseaseStage.hospitalMessage);
         } else {
           messages.push('You are turned away. Try "call doctor"');
         }
-      } else if($.inArray(recpieint, CALL_DICT.doctor) >= 0) {
+      } else if($.inArray(recipient, CALL_DICT.doctor) >= 0) {
         if(this.diseaseStage.doctorMessage) {
           messages.push(this.diseaseStage.doctorMessage);
         } else {
@@ -358,9 +358,9 @@ function Character() {
           Array.prototype.push.apply(
             messages, this.changeStage(this.diseaseStage.doctorStage));
         }
-      } else if($.inArray(recpieint, CALL_DICT.helpline) >= 0) {
+      } else if($.inArray(recipient, CALL_DICT.helpline) >= 0) {
         messages.push('The helpline details resources available to you. Try "call pychologist", "call doctor", or "call hospital"');
-      } else if($.inArray(recpieint, CALL_DICT.psychologist) >= 0) {
+      } else if($.inArray(recipient, CALL_DICT.psychologist) >= 0) {
         if(this.diseaseStage.psychologistMessage) {
           messages.push(this.diseaseStage.psychologistMessage);
         } else {
