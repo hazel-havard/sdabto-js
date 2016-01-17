@@ -374,6 +374,55 @@ sdabto.commands = {
   },
   socialize: function(hours) {
     this.echo(' ');
+    if(sdabto.character.hospitalActivities) {
+      this.echo('\tYou are not allowed outside yet.');
+    } else if(sdabto.character.displayEnergy() < 20) {
+      this.echo(
+        '\tYou cannot summon the energy to face people right now. ' +
+        'How about a quiet night in?');
+    } else if(Math.random() < sdabto.character.diseaseStage.socializeFailure) {
+      this.echo(
+        '\tYou get too anxious thinking about people right now. ' +
+        'How about a quiet night in?');
+    } else {
+      if (Math.random() < sdabto.character.diseaseStage.focusChance) {
+        this.echo('\tYou lose track of time and stay out for 6 hours.');
+        hours = 6;
+        switch(randomElement(sdabto.character.diseaseStage.socializingEffects)) {
+          case 'DRUNK':
+            this.echo(
+              '\tYou have a drink, then another and another and another. ' +
+              'You black out.');
+            if(Math.random() < ALCOHOL_POISONING_CHANCE) {
+              this.echo('\tYou get severe alcohol poisoning.');
+              terminal.echo(' ');
+              terminal.echo('[[;red;]You have died. Game over.]');
+              sdabto.character.dead = true;
+              sdabto.endTerminal(terminal);
+              return;
+            }
+            break;
+          case 'INAPPROPRIATE':
+            this.echo(
+              '\tYou start making more and more inappropriate jokes. ' +
+              'Some people laugh rioutously, but an old friend looks ' +
+              'disgusted.');
+            break;
+          case 'PROMISCUOUS':
+            this.echo(
+              '\tYou hook up with someone you just met.');
+            break;
+        }
+      } else if(hours > 6) {
+        this.echo('\tNone of your friends are free for more than 6 hours.');
+        hours = 6;
+      }
+
+      var messages = sdabto.character.socialize(hours);
+      messages.push('You hang out with friends and spend $' + (10 * hours));
+      sdabto.printMessages(this, messages);
+    }
+
     sdabto.postCommand(this);
   },
   watch: function(type, hours) {
