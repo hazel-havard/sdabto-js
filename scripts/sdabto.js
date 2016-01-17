@@ -205,7 +205,9 @@ sdabto.initInfo = {
       return false;
     }
     return true;
-  }
+  },
+  width: window.innerWidth - 50,
+  height: window.innerHeight - 50
 };
 
 sdabto.commands = {
@@ -232,6 +234,7 @@ sdabto.commands = {
     }
   },
   call: function(recipient) {
+    this.echo(' ');
     sdabto.postCommand(this);
   },
   clean: function() {
@@ -269,24 +272,53 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   exercise: function() {
+    this.echo(' ');
     sdabto.postCommand(this);
   },
   game: function(hours) {
+    this.echo(' ');
     sdabto.postCommand(this);
   },
   read: function(hours) {
+    this.echo(' ');
     sdabto.postCommand(this);
   },
   shop: function() {
+    this.echo(' ');
     sdabto.postCommand(this);
   },
   sleep: function(hours) {
+    this.echo(' ');
+    if(hours > sdabto.character.diseaseStage.sleepCap) {
+      this.echo(
+        '\tYou have trouble sleeping. You wake up early feeling fully ' +
+        'rested.');
+      hours = sdabto.character.diseaseStage.sleepCap;
+    } else if(hours > 12) {
+      this.echo('\tAfter 12 hours you wake up.');
+      hours = 12;
+    }
+    var messages = sdabto.character.sleep(hours);
+    messages.push('You sleep for ' + hours + ' hours.');
+    if(sdabto.character.wakeupDelay > 0) {
+      var hourStr = ' hour';
+      if(sdabto.character.wakeupDelay > 1) {
+        hourStr = ' hours';
+      }
+      messages.push(
+        'You stay in bed for ' + sdabto.character.wakeupDelay + hourStr);
+      Array.prototype.push.apply(
+        messages, sdabto.character.addHours(sdabto.character.wakeupDelay));
+    }
+    sdabto.printMessages(this, messages);
     sdabto.postCommand(this);
   },
   socialize: function(hours) {
+    this.echo(' ');
     sdabto.postCommand(this);
   },
   watch: function(type, hours) {
+    this.echo(' ');
     sdabto.postCommand(this);
   },
   work: function(hours) {
