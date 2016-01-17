@@ -417,15 +417,17 @@ sdabto.commands = {
     hours = sdabto.checkHours(this, hours);
     var messages = sdabto.character.sleep(hours);
     messages.push('You sleep for ' + hours + ' hours.');
-    if(sdabto.character.wakeupDelay > 0) {
+    if(sdabto.character.diseaseStage.wakeupDelay > 0) {
       var hourStr = ' hour';
-      if(sdabto.character.wakeupDelay > 1) {
+      if(sdabto.character.diseaseStage.wakeupDelay > 1) {
         hourStr = ' hours';
       }
       messages.push(
-        'You stay in bed for ' + sdabto.character.wakeupDelay + hourStr);
+        'You stay in bed for ' +
+        sdabto.character.diseaseStage.wakeupDelay + hourStr);
       Array.prototype.push.apply(
-        messages, sdabto.character.addHours(sdabto.character.wakeupDelay));
+        messages,
+        sdabto.character.addHours(sdabto.character.diseaseStage.wakeupDelay));
     }
     sdabto.printMessages(this, messages);
     sdabto.postCommand(this);
