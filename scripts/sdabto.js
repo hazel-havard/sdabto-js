@@ -218,11 +218,43 @@ sdabto.initInfo = {
       terminal.echo(' ');
       return false;
     }
+
     return true;
   },
   width: window.innerWidth - 50,
   height: window.innerHeight - 50
 };
+
+sdabto.checkHours = function(terminal, hours) {
+  if(sdabto.character.diseaseStage.mealTimes) {
+    var currHour = sdabto.character.hoursPlayed % 24;
+    var mealTimes = sdabto.character.diseaseStage.mealTimes;
+    var meal;
+
+    if(currHour <= mealTimes[0] && currHour + hours > mealTimes[0]) {
+      meal = 'breakfast';
+      hours = mealTimes[0] - currHour;
+    } else if(currHour <= mealTimes[1] && currHour + hours > mealTimes[1]) {
+      meal = 'lunch';
+      hours = mealTimes[1] - currHour;
+    } else if(currHour <= mealTimes[2] && currHour + hours > mealTimes[2]) {
+      meal = 'dinner';
+      hours = mealTimes[2] - currHour;
+    }
+
+    if(meal) {
+      var hourStr = ' hours ';
+      if(hours == 1) {
+        hourStr = ' hour ';
+      }
+      terminal.echo(
+        '\tA nurse stops you after ' + hours + hourStr + 'to tell you it ' +
+        'is ' + meal + ' time.');
+    }
+  }
+
+  return hours;
+}
 
 sdabto.commands = {
   help: function() {
@@ -325,6 +357,7 @@ sdabto.commands = {
       hours = 8;
     }
 
+    hours = sdabto.checkHours(hours);
     var messages = sdabto.character.game(hours);
     messages.push('You play on your computer.');
     sdabto.printMessages(this, messages);
@@ -340,6 +373,7 @@ sdabto.commands = {
         this.echo('\tAfter 4 hours you lose interest.');
         hours = 4;
       }
+      hours = sdabto.checkHours(hours);
       messages = sdabto.character.read(hours);
       messages.push('You read a lovely book.');
       sdabto.printMessages(this, messages);
@@ -380,6 +414,7 @@ sdabto.commands = {
       this.echo('\tAfter 12 hours you wake up.');
       hours = 12;
     }
+    hours = sdabto.checkHours(hours);
     var messages = sdabto.character.sleep(hours);
     messages.push('You sleep for ' + hours + ' hours.');
     if(sdabto.character.wakeupDelay > 0) {
@@ -461,6 +496,7 @@ sdabto.commands = {
         this.echo('\tAfter 4 hours you lose interest.');
         hours = 4;
       }
+      hours = sdabto.checkHours(hours);
       messages = sdabto.character.watch(hours);
       if(type == 'tv') {
         messages.push('You watch tv.');
