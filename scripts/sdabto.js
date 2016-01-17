@@ -14,7 +14,7 @@ sdabto.getStatus = function() {
 
   var hungerTime = MEAL_INTERVAL;
   if(sdabto.character.diseaseStage.hungerDelay) {
-    hungerTime = sdabto.character.diseaseStage.hungerDelay;
+    hungerTime += sdabto.character.diseaseStage.hungerDelay;
   }
 
   if(sdabto.character.lastMeal > hungerTime) {
