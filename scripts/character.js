@@ -360,7 +360,7 @@ function Character() {
             messages, this.changeStage(this.diseaseStage.doctorStage));
         }
       } else if($.inArray(recipient, CALL_DICT.helpline) >= 0) {
-        messages.push('The helpline details resources available to you. Try "call pychologist", "call doctor", or "call hospital"');
+        messages.push('The helpline details resources available to you. Try "call psychologist", "call doctor", or "call hospital"');
       } else if($.inArray(recipient, CALL_DICT.psychologist) >= 0) {
         if(this.diseaseStage.psychologistMessage) {
           messages.push(this.diseaseStage.psychologistMessage);
