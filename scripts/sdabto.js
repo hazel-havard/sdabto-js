@@ -37,10 +37,21 @@ sdabto.getStatus = function() {
   var energy = sdabto.character.displayEnergy();
   var day = Math.floor(sdabto.character.hoursPlayed / 24) + 1;
   var hour = sdabto.character.hoursPlayed % 24;
+  var money = sdabto.character.money;
+
+  if(mood < 30 || mood > 145) {
+    mood = '[[;red;]' + mood + ']';
+  }
+  if(energy < 30 || energy > 145) {
+    energy = '[[;red;]' + energy + ']';
+  }
+  if(money < 0) {
+    money = '[[;red;]' + money + ']';
+  }
 
   var statusLine =
     'Day: ' + day + ' Hour: ' + hour + ' Mood: ' + mood + ' Energy: ' +
-    energy + ' Money: $' + sdabto.character.money +
+    energy + ' Money: $' + money +
     ' Food: ' + sdabto.character.groceries + ' meals';
 
   return {
@@ -72,7 +83,7 @@ sdabto.printMessages = function(terminal, messages) {
 sdabto.postCommand = function(terminal) {
   if(sdabto.character.dead) {
     terminal.echo(' ');
-    terminal.echo('You have died. Game over.');
+    terminal.echo('[[;red;]You have died. Game over.]');
     sdabto.endTerminal(terminal);
   }
 
@@ -98,7 +109,8 @@ sdabto.postCommand = function(terminal) {
             'You get into a terrible car accident. You and the driver are ' +
             'both killed.');
           terminal.echo(' ');
-          terminal.echo('You have died. Game over.');
+          terminal.echo('[[;red;]You have died. Game over.]');
+          sdabto.character.dead = true;
           sdabto.endTerminal(terminal);
         }
         break;
@@ -113,11 +125,13 @@ sdabto.postCommand = function(terminal) {
     }
   }
 
-  statusMessages = sdabto.getStatus();
-  sdabto.printMessages(terminal,statusMessages.messages);
-  terminal.echo(' ');
-  terminal.echo(statusMessages.statusLine);
-  terminal.echo(' ');
+  if(!sdabto.character.dead) {
+    statusMessages = sdabto.getStatus();
+    sdabto.printMessages(terminal,statusMessages.messages);
+    terminal.echo(' ');
+    terminal.echo(statusMessages.statusLine);
+    terminal.echo(' ');
+  }
 };
 
 sdabto.endTerminal = function(terminal) {
@@ -301,6 +315,24 @@ sdabto.commands = {
   },
   shop: function() {
     this.echo(' ');
+    if(sdabto.character.hospitalActivities) {
+      this.echo('\tYou are not allowed outside yet.');
+    } else if(sdabto.character.mealTimes
+              && $.inArray(
+                sdabto.character.hoursPlayed % 24,
+                sdabto.character.diseaseStage.mealTimes) >= 0) {
+      this.echo('\tA nurse stops you to tell you it is meal time.');
+    } else if(sdabto.character.displayEnergy() < 10) {
+      this.echo(
+        '\tYou are too tired to haul home food. ' +
+        'There must be something in the fridge...');
+    } else if(sdabto.character.groceries > 21) {
+      this.echo('\tYour fridge is too full for more groceries');
+    } else {
+      var messages = sdabto.character.shopping();
+      messages.push('You buy another week of groceries');
+      sdabto.printMessages(this, messages);
+    }
     sdabto.postCommand(this);
   },
   sleep: function(hours) {
