@@ -213,7 +213,7 @@ sdabto.initInfo = {
           return false;
         }
       }
-    } else if(!intCommand && command.length != 1) {
+    } else if(!intCommand && command[0] != 'watch' && command.length != 1) {
       terminal.echo('Type this command on its own (eg. "eat")');
       terminal.echo(' ');
       return false;
@@ -315,6 +315,7 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   game: function(hours) {
+    hours = parseInt(hours, 10);
     this.echo(' ');
     if(hours > 8) {
       this.echo('\tAfter 8 hours you lose interest.');
@@ -330,7 +331,18 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   read: function(hours) {
+    hours = parseInt(hours, 10);
     this.echo(' ');
+    if(Math.random() < sdabto.character.diseaseStage.leisureFailure) {
+      this.echo('\tYou try to read but the words swim on the page.');
+    } else {
+      if(hours > 4) {
+        this.echo('\tAfter 4 hours you lose interest.');
+        hours = 4;
+      }
+      messages = sdabto.character.read(hours);
+      sdabto.printMessages(this, messages);
+    }
     sdabto.postCommand(this);
   },
   shop: function() {
@@ -356,6 +368,7 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   sleep: function(hours) {
+    hours = parseInt(hours, 10);
     this.echo(' ');
     if(hours > sdabto.character.diseaseStage.sleepCap) {
       this.echo(
@@ -382,6 +395,7 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   socialize: function(hours) {
+    hours = parseInt(hours, 10);
     this.echo(' ');
     if(sdabto.character.hospitalActivities) {
       this.echo('\tYou are not allowed outside yet.');
@@ -435,10 +449,12 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   watch: function(type, hours) {
+    hours = parseInt(hours, 10);
     this.echo(' ');
     sdabto.postCommand(this);
   },
   work: function(hours) {
+    hours = parseInt(hours, 10);
     this.echo(' ');
     if(sdabto.character.diseaseStage.hospitalActivities) {
       this.echo(

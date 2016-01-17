@@ -64,6 +64,7 @@ function Character() {
     hoursGamed: 0,
     hoursSocialized: 0,
     hoursWatched: 0,
+    hoursRead: 0,
     calledParents: false,
     calledFriend: false,
     diseaseDays: 0,
