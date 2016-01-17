@@ -113,7 +113,6 @@ sdabto.postCommand = function(terminal) {
     }
   }
 
-  terminal.echo(' ');
   statusMessages = sdabto.getStatus();
   sdabto.printMessages(terminal,statusMessages.messages);
   terminal.echo(' ');
@@ -200,7 +199,7 @@ sdabto.initInfo = {
           return false;
         }
       }
-    } else if(command.length != 1) {
+    } else if(!intCommand && command.length != 1) {
       terminal.echo('Type this command on its own (eg. "eat")');
       terminal.echo(' ');
       return false;
@@ -236,14 +235,12 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   clean: function() {
+    this.echo(' ');
     if(sdabto.character.diseaseStage.hospitalActivities) {
-      this.echo(' ');
       this.echo('\tYou are not at home right now.');
     } else if(Math.random() < sdabto.character.diseaseStage.workFailure) {
-      this.echo(' ');
       this.echo('\tYou cannot be bothered to clean anything right now.');
     } else if(sdabto.character.displayEnergy() < 20) {
-      this.echo(' ');
       this.echo('\tYou are too tired to face cleaning right now.');
     } else {
       var messages = sdabto.character.clean();
@@ -253,18 +250,16 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   eat: function() {
+    this.echo(' ');
     if(sdabto.character.diseaseStage.mealTimes
        && $.inArray(
          sdabto.character.hoursPlayed % 24,
          sdabto.character.diseaseStage.mealTimes) < 0) {
-      this.echo(' ');
       this.echo('\tIt is not meal time yet.');
     } else if(sdabto.character.lastMeal < 4
               || Math.random() < sdabto.character.diseaseStage.eatFailure) {
-      this.echo(' ');
       this.echo('\tYou do not feel like eating right now.');
     } else if(sdabto.character.groceries <= 0) {
-      this.echo(' ');
       this.echo('\tYou are out of food. Try "shop" to get more.');
     } else {
       var messages = sdabto.character.eat();
@@ -295,6 +290,31 @@ sdabto.commands = {
     sdabto.postCommand(this);
   },
   work: function(hours) {
+    this.echo(' ');
+    if(sdabto.character.diseaseStage.hospitalActivities) {
+      this.echo(
+        '\tYour doctor does not want you to work while you are in the ' +
+        'hospital.');
+    } else if(Math.random() < self.character.diseaseStage.workFailure) {
+      this.echo(
+        '\tYou sit down to work but end up playing video games instead.');
+      sdabto.printMessages(this, sdabto.character.game(hours));
+    } else if(self.character.displayEnergy() < 20) {
+      this.echo('\tYou try to work but your eyes cannot focus on the screen.');
+    } else {
+      if(hours > 8) {
+        this.echo('\tAfter 8 hours your mind starts to wander...');
+        hours = 8;
+      } else if(Math.random() < sdabto.character.diseaseStage.focusChance) {
+        this.echo(
+          '\tYou get in the zone and lose track of time. ' +
+          'You work for 8 hours.');
+        hours = 8;
+      }
+      var messages = sdabto.character.work(hours);
+      messages.push('You go to your computer and work.');
+      sdabto.printMessages(this, messages);
+    }
     sdabto.postCommand(this);
   },
   quit: function() {
