@@ -320,13 +320,13 @@ sdabto.commands = {
     if(hours > 8) {
       this.echo('\tAfter 8 hours you lose interest.');
       hours = 8;
-    } else if(math.Random() < sdabto.character.diseaseStage.focusChance) {
+    } else if(Math.random() < sdabto.character.diseaseStage.focusChance) {
       this.echo('\tYou lose track of time and game for 8 hours.');
       hours = 8;
     }
 
     var messages = sdabto.character.game(hours);
-    messages.append('You play on your computer.');
+    messages.push('You play on your computer.');
     sdabto.printMessages(this, messages);
     sdabto.postCommand(this);
   },
@@ -341,6 +341,7 @@ sdabto.commands = {
         hours = 4;
       }
       messages = sdabto.character.read(hours);
+      messages.push('You read a lovely book.');
       sdabto.printMessages(this, messages);
     }
     sdabto.postCommand(this);
@@ -451,6 +452,24 @@ sdabto.commands = {
   watch: function(type, hours) {
     hours = parseInt(hours, 10);
     this.echo(' ');
+    if(Math.random() < sdabto.character.diseaseStage.leisureFailure) {
+      this.echo(
+        '\tYou try to watch something but you have too much trouble ' +
+        'staying focused on the plot.');
+    } else {
+      if(hours > 4) {
+        this.echo('\tAfter 4 hours you lose interest.');
+        hours = 4;
+      }
+      messages = sdabto.character.watch(hours);
+      if(type == 'tv') {
+        messages.push('You watch tv.');
+      } else {
+        messages.push('You watch a movie.');
+      }
+      sdabto.printMessages(this, messages);
+    }
+
     sdabto.postCommand(this);
   },
   work: function(hours) {
