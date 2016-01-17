@@ -9,10 +9,64 @@ sdabto.validateIntArg = function(value) {
   return parseInt(value, 10) === parseInt(value, 10);
 }
 
+sdabto.getStatus = function() {
+  var messages = [];
+
+  var hungerTime = MEAL_INTERVAL;
+  if(sdabto.character.diseaseStage.hungerDelay) {
+    hungerTime = sdabto.character.diseaseStage.hungerDelay;
+  }
+
+  if(sdabto.character.lastMeal > hungerTime) {
+    messages.push('You feel hungry.');
+  }
+  if(sdabto.character.lastSleep > SLEEP_INTERVAL) {
+    messages.push('You feel sleepy.');
+  }
+  if(sdabto.character.lastExercise > EXERCISE_INTERVAL) {
+    messages.push('You feel lethargic.');
+  }
+  if(sdabto.character.lastSocial > SOCIAL_INTERVAL) {
+    messages.push('You feel lonely.');
+  }
+  if(sdabto.character.lastCleaned > CLEANING_INTERVAL) {
+    messages.push('Your house is a mess.');
+  }
+
+  var mood = sdabto.character.displayMood();
+  var energy = sdabto.character.displayEnergy();
+  var day = Math.floor(sdabto.character.hoursPlayed / 24) + 1;
+  var hour = sdabto.character.hoursPlayed % 24;
+
+  var statusLine =
+    'Day: ' + day + ' Hour: ' + hour + ' Mood: ' + mood + ' Energy: ' +
+    energy + ' Money: $' + sdabto.character.money +
+    ' Food: ' + sdabto.character.groceries + ' meals';
+
+  return {
+    messages: messages,
+    statusLine: statusLine
+  };
+}
+
+sdabto.getGreetings = function() {
+  greetings = MESSAGES.introMessage;
+  var statusMessages = sdabto.getStatus();
+  greetings += '\n';
+  for(var i = 0; i < statusMessages.messages.length; i++) {
+    greetings += '\t' + statusMessages.messages[i] + '\n';
+  }
+  greetings += '\n';
+  greetings += statusMessages.statusLine;
+  greetings += '\n';
+
+  return greetings;
+};
+
 sdabto.initInfo = {
   name: 'sdabto',
   prompt: 'What would you like to do? ',
-  greetings: MESSAGES.introMessage,
+  greetings: sdabto.getGreetings(),
   onCommandNotFound: function(command, terminal) {
     terminal.echo('Command "' + command + '" not found.');
     terminal.exec('help');
@@ -98,17 +152,28 @@ sdabto.commands = {
       this.echo(helpString);
     }
   },
-  call: function(recipient) {},
-  clean: function() {},
-  eat: function() {},
-  exercise: function() {},
-  game: function(hours) {},
-  read: function(hours) {},
-  shop: function() {},
-  sleep: function(hours) {},
-  socialize: function(hours) {},
-  watch: function(type, hours) {},
-  work: function(hours) {}
+  call: function(recipient) {
+  },
+  clean: function() {
+  },
+  eat: function() {
+  },
+  exercise: function() {
+  },
+  game: function(hours) {
+  },
+  read: function(hours) {
+  },
+  shop: function() {
+  },
+  sleep: function(hours) {
+  },
+  socialize: function(hours) {
+  },
+  watch: function(type, hours) {
+  },
+  work: function(hours) {
+  }
 };
 
 sdabto.init = function() {
