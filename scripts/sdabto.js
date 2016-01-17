@@ -357,7 +357,7 @@ sdabto.commands = {
       hours = 8;
     }
 
-    hours = sdabto.checkHours(hours);
+    hours = sdabto.checkHours(this, hours);
     var messages = sdabto.character.game(hours);
     messages.push('You play on your computer.');
     sdabto.printMessages(this, messages);
@@ -373,7 +373,7 @@ sdabto.commands = {
         this.echo('\tAfter 4 hours you lose interest.');
         hours = 4;
       }
-      hours = sdabto.checkHours(hours);
+      hours = sdabto.checkHours(this, hours);
       messages = sdabto.character.read(hours);
       messages.push('You read a lovely book.');
       sdabto.printMessages(this, messages);
@@ -414,7 +414,7 @@ sdabto.commands = {
       this.echo('\tAfter 12 hours you wake up.');
       hours = 12;
     }
-    hours = sdabto.checkHours(hours);
+    hours = sdabto.checkHours(this, hours);
     var messages = sdabto.character.sleep(hours);
     messages.push('You sleep for ' + hours + ' hours.');
     if(sdabto.character.wakeupDelay > 0) {
@@ -496,7 +496,7 @@ sdabto.commands = {
         this.echo('\tAfter 4 hours you lose interest.');
         hours = 4;
       }
-      hours = sdabto.checkHours(hours);
+      hours = sdabto.checkHours(this, hours);
       messages = sdabto.character.watch(hours);
       if(type == 'tv') {
         messages.push('You watch tv.');
@@ -515,11 +515,11 @@ sdabto.commands = {
       this.echo(
         '\tYour doctor does not want you to work while you are in the ' +
         'hospital.');
-    } else if(Math.random() < self.character.diseaseStage.workFailure) {
+    } else if(Math.random() < sdabto.character.diseaseStage.workFailure) {
       this.echo(
         '\tYou sit down to work but end up playing video games instead.');
       sdabto.printMessages(this, sdabto.character.game(hours));
-    } else if(self.character.displayEnergy() < 20) {
+    } else if(sdabto.character.displayEnergy() < 20) {
       this.echo('\tYou try to work but your eyes cannot focus on the screen.');
     } else {
       if(hours > 8) {
