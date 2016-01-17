@@ -1,9 +1,15 @@
 var sdabto = sdabto || {};
 
+sdabto.character = new Character();
+
 sdabto.initInfo = {
   name: 'sdabto',
   prompt: 'What would you like to do? ',
-  greetings: MESSAGES.introMessage
+  greetings: MESSAGES.introMessage,
+  onCommandNotFound: function(command, terminal) {
+    terminal.echo('Command "' + command + '" not found.');
+    terminal.exec('help');
+  }
 };
 
 sdabto.commands = {
