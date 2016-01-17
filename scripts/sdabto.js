@@ -102,11 +102,11 @@ sdabto.postCommand = function(terminal) {
         break;
       case 'DRIVING':
         terminal.echo(
-          'You rent a car and go for a drive. You find yourself driving ' +
+          '\tYou rent a car and go for a drive. You find yourself driving ' +
           'much too fast.');
         if(Math.random() < SPEEDING_RISK) {
           terminal.echo(
-            'You get into a terrible car accident. You and the driver are ' +
+            '\tYou get into a terrible car accident. You and the driver are ' +
             'both killed.');
           terminal.echo(' ');
           terminal.echo('[[;red;]You have died. Game over.]');
